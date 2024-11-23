@@ -1,29 +1,32 @@
 use std::fs;
 use std::env;
+use std::path::{Path, PathBuf};
+use directories_next::ProjectDirs;
+use lazy_static::lazy_static;
+use log::info;
+
+lazy_static! {
+    static ref APP_DIR: ProjectDirs = ProjectDirs::from("com", "example", "disco").unwrap();
+    static ref DATA_DIR: PathBuf = APP_DIR.data_dir().to_path_buf();
+}
 
 #[tauri::command]
 fn read_result() -> Result<i32, String> {
-    // Получаем путь к директории пользователя
-    let home_dir = env::var("USERPROFILE").unwrap_or_else(|_| String::from("C:\\"));
-    let file_path = format!("{}/result.txt", home_dir); // Путь в директории пользователя
-
-    match fs::read_to_string(file_path) {
-        Ok(content) => {
-            // Преобразуем строку в i32
-            content.trim().parse::<i32>().map_err(|e| format!("Ошибка парсинга: {}", e))
-        }
-        Err(e) => Err(format!("Ошибка чтения файла: {}", e)),
-    }
+    let file_path = Path::join(&DATA_DIR, "result.txt");
+    let result = fs::read_to_string(file_path)
+        .map_err(|e| e.to_string())?;
+    let result = result.trim().parse()
+        .map_err(|e: std::num::ParseIntError| e.to_string())?;
+    info!("Read result: {}", result);
+    Ok(result)
 }
 
 #[tauri::command]
 fn save_result(result: i32) -> Result<(), String> {
-    // Получаем путь к директории пользователя
-    let home_dir = env::var("USERPROFILE").unwrap_or_else(|_| String::from("C:\\"));
-    let file_path = format!("{}/result.txt", home_dir); // Путь в директории пользователя
-
+    let file_path = Path::join(&DATA_DIR, "result.txt");
+    info!("Saving result to {:?}", file_path);
     fs::write(file_path, result.to_string())
-        .map_err(|e| format!("Не удалось записать в файл: {}", e))?;
+        .map_err(|e| e.to_string())?;
     Ok(())
 }
 
