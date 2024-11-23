@@ -5,9 +5,14 @@ use directories_next::ProjectDirs;
 use lazy_static::lazy_static;
 use log::info;
 
+#[cfg(not(target_os="android"))]
 lazy_static! {
     static ref APP_DIR: ProjectDirs = ProjectDirs::from("com", "example", "disco").unwrap();
     static ref DATA_DIR: PathBuf = APP_DIR.data_dir().to_path_buf();
+}
+#[cfg(target_os="android")]
+lazy_static! {
+    static ref DATA_DIR: PathBuf = PathBuf::from("/data/data/com.clicker.app/files/");
 }
 
 #[tauri::command]
