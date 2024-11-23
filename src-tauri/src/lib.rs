@@ -24,6 +24,7 @@ fn read_result() -> Result<i32, String> {
 #[tauri::command]
 fn save_result(result: i32) -> Result<(), String> {
     let file_path = Path::join(&DATA_DIR, "result.txt");
+    fs::create_dir_all(&*DATA_DIR).unwrap();
     info!("Saving result to {:?}", file_path);
     fs::write(file_path, result.to_string())
         .map_err(|e| e.to_string())?;
