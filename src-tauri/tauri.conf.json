@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "test",
+  "productName": "clicker",
   "version": "0.1.0",
-  "identifier": "com.test.app",
+  "identifier": "com.clicker.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,13 @@
   "app": {
     "windows": [
       {
-        "title": "test",
-        "width": 800,
-        "height": 600
+        "title": "clicker",
+        "width": 400,
+        "height": 400,
+        "x": 100,
+        "y": 100,
+        "minWidth": 400,
+        "minHeight": 400
       }
     ],
     "security": {
@@ -29,7 +33,7 @@
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/yakui.ico"
     ]
   }
 }

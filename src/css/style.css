@@ -126,6 +126,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   background: #000;
   color: #fff;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .title {
@@ -153,21 +157,21 @@ h1, h2, h3, h4, h5, h6 {
       -ms-flex-align: center;
           align-items: center;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
   border-radius: 0.9375em;
-  background: #000000;
-  color: #fff;
   border: 1px solid #fff;
-  -webkit-transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
-  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+  -webkit-transition: background 0.2s ease-in-out, color 0.2s ease-in-out, -webkit-box-shadow 0.05s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out, -webkit-box-shadow 0.05s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.05s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.05s ease-in-out, -webkit-box-shadow 0.05s ease-in-out;
 }
 .button:hover {
   background: #fff;
   color: #000000;
   border: none;
+}
+.button:active {
+  -webkit-box-shadow: inset 0 0 0 0.0625em #000;
+          box-shadow: inset 0 0 0 0.0625em #000;
 }
 
 .save {
