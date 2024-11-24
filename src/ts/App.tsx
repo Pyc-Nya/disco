@@ -1,17 +1,22 @@
 import { observer } from "mobx-react-lite";
 import CountStore from "./stores/CountStore";
-import { invoke } from "@tauri-apps/api/core";
 import { useState, useEffect } from "react";
+import { commands } from "../bindings";
 
 function App() {
-  const [saveText, setsaveText] = useState<string>("Save result!");
+  const [saveText, setSaveText] = useState<string>("Save result!");
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const loadResult = async () => {
       try {
-        const result: number = await invoke("read_result");
-        CountStore.setCount(result);
+        const res = await commands.readResult();
+        if (res.status == "ok") {
+            CountStore.setCount(res.data);
+        }
+        else {
+            console.error("Ошибка загрузки данных:", res.error);
+        }
       } catch (error) {
         console.error("Ошибка загрузки данных:", error);
       }
@@ -34,11 +39,14 @@ function App() {
         clearTimeout(timeoutId);
       }
 
-      await invoke("save_result", { result: CountStore.count });
+      if ((await commands.saveResult(CountStore.count)).status != "ok") {
+        console.error("Ошибка сохранения");
+        return;
+      }
 
-      setsaveText("Saved!");
+      setSaveText("Saved!");
       const id = setTimeout(() => {
-        setsaveText("Save result!");
+        setSaveText("Save result!");
       }, 500);
       setTimeoutId(id); 
     } catch (error) {
