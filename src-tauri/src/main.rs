@@ -7,5 +7,5 @@ use simple_logger::SimpleLogger;
 fn main() {
     SimpleLogger::new().init().unwrap();
     info!("rust: Starting app");
-    test_lib::run()
+    disco_lib::run()
 }
